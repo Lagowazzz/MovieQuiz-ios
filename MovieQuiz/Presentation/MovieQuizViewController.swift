@@ -131,7 +131,12 @@ final class MovieQuizViewController: UIViewController {
             
             
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.yesButton.isEnabled = true
+            self.noButton.isEnabled = true
             self.showNextQuestionOrResults()
         }
     }
