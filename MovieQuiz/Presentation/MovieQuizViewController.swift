@@ -95,13 +95,13 @@ final class MovieQuizViewController: UIViewController {
     
     @IBAction private func noButtonClicked(_ sender: Any) {
         
-      answerGived(answer: false)
+        answerGived(answer: false)
         
     }
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
         
-      answerGived(answer: true)
+        answerGived(answer: true)
         
     }
     
@@ -118,7 +118,7 @@ final class MovieQuizViewController: UIViewController {
         return QuizStepViewModel(image: image, question: question, questionNumber: questionNumber)
         
     }
-
+    
     private func show(quiz step: QuizStepViewModel) {
         
         counterLabel.text = step.questionNumber
