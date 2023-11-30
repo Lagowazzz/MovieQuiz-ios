@@ -115,9 +115,14 @@ final class MovieQuizViewController: UIViewController {
         textLabel.text = step.question
         imageView.image = step.image
     }
+    private func resetImageBorder() {
+        imageView.layer.borderWidth = 0
+        imageView.layer.borderColor = nil
+    }
     private func showAnswerResult(isCorrect: Bool) {
         yesButton.isEnabled = false
         noButton.isEnabled = false
+        
         if isCorrect == false {
             imageView.layer.masksToBounds = true
             imageView.layer.borderWidth = 8
@@ -137,6 +142,7 @@ final class MovieQuizViewController: UIViewController {
             }
             self.yesButton.isEnabled = true
             self.noButton.isEnabled = true
+            resetImageBorder()
             self.showNextQuestionOrResults()
         }
     }
