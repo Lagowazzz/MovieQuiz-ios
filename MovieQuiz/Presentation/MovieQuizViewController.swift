@@ -4,10 +4,15 @@ final class MovieQuizViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let quizStepViewModel = convert(model:(questions[currentQuestionIndex]))
         show(quiz: quizStepViewModel)
     }
+    
+    @IBOutlet weak var yesButton: UIButton!
+    
+    @IBOutlet weak var noButton: UIButton!
+    
+    
     
     @IBOutlet private var counterLabel: UILabel!
     
@@ -66,6 +71,7 @@ final class MovieQuizViewController: UIViewController {
             correctAnswer: false)
     ]
     
+    
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     
@@ -110,6 +116,8 @@ final class MovieQuizViewController: UIViewController {
         imageView.image = step.image
     }
     private func showAnswerResult(isCorrect: Bool) {
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
         if isCorrect == false {
             imageView.layer.masksToBounds = true
             imageView.layer.borderWidth = 8
@@ -120,6 +128,7 @@ final class MovieQuizViewController: UIViewController {
             imageView.layer.borderWidth = 8
             imageView.layer.borderColor = UIColor.ypGreen.cgColor
             correctAnswers += 1
+            
             
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -135,11 +144,15 @@ final class MovieQuizViewController: UIViewController {
                 text: text,
                 buttonText: "Сыграть ещё раз")
             show(quiz: viewModel)
+            yesButton.isEnabled = true
+            noButton.isEnabled = true
         } else {
             
             currentQuestionIndex += 1
             let nextQuestion = questions[currentQuestionIndex]
             let viewModel = convert(model: nextQuestion)
+            yesButton.isEnabled = true
+            noButton.isEnabled = true
             show(quiz: viewModel)
             
         }
@@ -160,9 +173,7 @@ final class MovieQuizViewController: UIViewController {
             let viewModel = self.convert(model: firstQuestion)
             self.show(quiz: viewModel)
         }
-        
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
-    
 }
