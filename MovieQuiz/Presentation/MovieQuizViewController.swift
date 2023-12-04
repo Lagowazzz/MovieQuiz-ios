@@ -105,9 +105,18 @@ final class MovieQuizViewController: UIViewController {
         
     }
     
+    private func setButtonsStatus(isEnabled: Bool) {
+        
+        yesButton.isEnabled = isEnabled
+        noButton.isEnabled = isEnabled
+        
+    }
+    
     private func answerGived(answer: Bool) {
+        
         let currentQuestion = questions[currentQuestionIndex]
         showAnswerResult(isCorrect: answer == currentQuestion.correctAnswer)
+        
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -136,15 +145,16 @@ final class MovieQuizViewController: UIViewController {
     
     private func showAnswerResult(isCorrect: Bool) {
         
-        yesButton.isEnabled = false
-        noButton.isEnabled = false
+        setButtonsStatus(isEnabled: false)
         
         if isCorrect == false {
+            
             imageView.layer.masksToBounds = true
             imageView.layer.borderWidth = 8
             imageView.layer.borderColor = UIColor.ypRed.cgColor
             
         } else {
+            
             imageView.layer.masksToBounds = true
             imageView.layer.borderWidth = 8
             imageView.layer.borderColor = UIColor.ypGreen.cgColor
@@ -160,8 +170,7 @@ final class MovieQuizViewController: UIViewController {
                 
             }
             
-            self.yesButton.isEnabled = true
-            self.noButton.isEnabled = true
+            setButtonsStatus(isEnabled: true)
             resetImageBorder()
             self.showNextQuestionOrResults()
             
@@ -179,16 +188,14 @@ final class MovieQuizViewController: UIViewController {
                 text: text,
                 buttonText: "Сыграть ещё раз")
             show(quiz: viewModel)
-            yesButton.isEnabled = true
-            noButton.isEnabled = true
+            setButtonsStatus(isEnabled: true)
             
         } else {
             
             currentQuestionIndex += 1
             let nextQuestion = questions[currentQuestionIndex]
             let viewModel = convert(model: nextQuestion)
-            yesButton.isEnabled = true
-            noButton.isEnabled = true
+            setButtonsStatus(isEnabled: true)
             show(quiz: viewModel)
             
         }
