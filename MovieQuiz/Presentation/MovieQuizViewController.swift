@@ -22,6 +22,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private var currentQuestion: QuizQuestion?
     
+    let alertPresenter = AlertPresenter()
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -140,9 +142,18 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
     }
     
+    private func resetGame() {
+        
+        currentQuestionIndex = 0
+        correctAnswers = 0
+        questionFactory?.requestNextQuestion()
+        
+    }
+    
     private func showNextQuestionOrResults() {
         
         if currentQuestionIndex == questionsAmount - 1 {
+            
             let text = correctAnswers == questionsAmount ?
             "Поздравляем, вы ответили на 10 из 10!" :
             "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
@@ -150,7 +161,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 title: "Этот раунд окончен!",
                 text: text,
                 buttonText: "Сыграть ещё раз")
-            show(quiz: viewModel)
+            
+            alertPresenter.presentAlert(on: self, with: AlertModel(
+                
+                title: viewModel.title,
+                message: viewModel.text,
+                buttonText: viewModel.buttonText) { [weak self] in
+                    self?.resetGame()
+                })
+            
             setButtonsStatus(isEnabled: true)
             
         } else {
@@ -160,32 +179,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             setButtonsStatus(isEnabled: true)
             
         }
-        
-    }
-    
-    private func show(quiz result: QuizResultsViewModel) {
-        
-        let alert = UIAlertController(
-            title: result.title,
-            message: result.text,
-            preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            
-            guard let self = self else {
-                
-                return
-                
-            }
-            
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            self.questionFactory?.requestNextQuestion()
-            
-        }
-        
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
         
     }
     
