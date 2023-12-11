@@ -22,31 +22,32 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private var currentQuestion: QuizQuestion?
     
-    
-    
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
-            
-        
         
     }
     
     // MARK: - QuestionFactoryDelegate
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
+        
         guard let question = question else {
+            
             return
+            
         }
-
+        
         currentQuestion = question
         let viewModel = convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
+            
         }
+        
     }
     
     @IBAction private func noButtonClicked(_ sender: Any) {
@@ -75,6 +76,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             return
             
         }
+        
         showAnswerResult(isCorrect: answer == currentQuestion.correctAnswer)
         
     }
@@ -142,8 +144,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         if currentQuestionIndex == questionsAmount - 1 {
             let text = correctAnswers == questionsAmount ?
-                    "Поздравляем, вы ответили на 10 из 10!" :
-                    "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
+            "Поздравляем, вы ответили на 10 из 10!" :
+            "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: text,
@@ -154,10 +156,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         } else {
             
             currentQuestionIndex += 1
-     questionFactory?.requestNextQuestion()
-                setButtonsStatus(isEnabled: true)
-      
-     
+            questionFactory?.requestNextQuestion()
+            setButtonsStatus(isEnabled: true)
             
         }
         

@@ -3,7 +3,7 @@ import Foundation
 class QuestionFactory: QuestionFactoryProtocol {
     
     weak var delegate: QuestionFactoryDelegate?
-
+    
     private var questions: [QuizQuestion] = [
         
         QuizQuestion(
@@ -63,7 +63,7 @@ class QuestionFactory: QuestionFactoryProtocol {
             return
             
         }
-
+        
         let question = questions[safe: index]
         delegate?.didReceiveNextQuestion(question: question)
         
