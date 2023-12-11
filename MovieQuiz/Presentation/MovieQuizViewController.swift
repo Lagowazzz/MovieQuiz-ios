@@ -28,7 +28,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         super.viewDidLoad()
         
-        questionFactory?.delegate = self
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
             

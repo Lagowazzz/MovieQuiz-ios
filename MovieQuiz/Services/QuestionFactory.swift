@@ -49,6 +49,12 @@ class QuestionFactory: QuestionFactoryProtocol {
         
     ]
     
+    init(delegate: QuestionFactoryDelegate?) {
+        
+        self.delegate = delegate
+        
+    }
+    
     func requestNextQuestion() {
         
         guard let index = (0..<questions.count).randomElement() else {
