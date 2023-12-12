@@ -58,15 +58,20 @@ class QuestionFactory: QuestionFactoryProtocol {
     }
     
     func requestNextQuestion() {
+        
         questions.shuffle()
-
+        
         if let newQuestion = questions.first(where: { $0.image != currentQuestion?.image }) {
+            
             currentQuestion = newQuestion
             delegate?.didReceiveNextQuestion(question: newQuestion)
+            
         } else {
+            
             delegate?.didReceiveNextQuestion(question: nil)
+            
         }
+        
     }
-
     
 }
