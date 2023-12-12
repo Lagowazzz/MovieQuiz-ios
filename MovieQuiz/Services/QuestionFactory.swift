@@ -4,6 +4,8 @@ class QuestionFactory: QuestionFactoryProtocol {
     
     weak var delegate: QuestionFactoryDelegate?
     
+    private var currentQuestion: QuizQuestion?
+    
     private var questions: [QuizQuestion] = [
         
         QuizQuestion(
@@ -56,17 +58,15 @@ class QuestionFactory: QuestionFactoryProtocol {
     }
     
     func requestNextQuestion() {
-        
-        guard let index = (0..<questions.count).randomElement() else {
-            
+        questions.shuffle()
+
+        if let newQuestion = questions.first(where: { $0.image != currentQuestion?.image }) {
+            currentQuestion = newQuestion
+            delegate?.didReceiveNextQuestion(question: newQuestion)
+        } else {
             delegate?.didReceiveNextQuestion(question: nil)
-            return
-            
         }
-        
-        let question = questions[safe: index]
-        delegate?.didReceiveNextQuestion(question: question)
-        
     }
+
     
 }
