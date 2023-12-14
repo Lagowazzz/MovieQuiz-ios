@@ -3,10 +3,9 @@ import UIKit
 class AlertPresenter {
     
     func presentAlert(on viewController: UIViewController, with model: AlertModel) {
-        
         let alert = UIAlertController(
             title: model.title,
-            message: model.message,
+            message: model.resultMessage,
             preferredStyle: .alert
         )
         

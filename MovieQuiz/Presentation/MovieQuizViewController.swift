@@ -22,12 +22,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private var currentQuestion: QuizQuestion?
     
-    let alertPresenter = AlertPresenter()
+    private var alertPresenter = AlertPresenter()
+    
+    private var statisticService: StatisticServiceImplementation = StatisticServiceImplementation()
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        statisticService = StatisticServiceImplementation()
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
         
@@ -153,24 +156,40 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showNextQuestionOrResults() {
         
         if currentQuestionIndex == questionsAmount - 1 {
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
             
-            let text = correctAnswers == questionsAmount ?
-            "Поздравляем, вы ответили на 10 из 10!" :
-            "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
+            let resultText = "Ваш результат: \(correctAnswers)/10"
+            let totalGamesText = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+            let bestGameText: String
+            if statisticService.bestGame.correct > 0 {
+                let formattedDate = dateTimeDefaultFormatter.string(from: statisticService.bestGame.date)
+                bestGameText = "Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(formattedDate))"
+            } else {
+                bestGameText = "Рекорд: Еще нет данных"
+            }
+            let averageAccuracyText = String(format: "Средняя точность: %.2f%%", statisticService.totalAccuracy * 100)
+            
+            let message = """
+            \(resultText)
+            \(totalGamesText)
+            \(bestGameText)
+            \(averageAccuracyText)
+            """
+            
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
-                text: text,
+                text: message,
                 buttonText: "Сыграть ещё раз")
             
             alertPresenter.presentAlert(on: self, with: AlertModel(
-                
                 title: viewModel.title,
-                message: viewModel.text,
+                resultMessage: viewModel.text,
                 buttonText: viewModel.buttonText) { [weak self] in
                     self?.resetGame()
                 })
             
             setButtonsStatus(isEnabled: true)
+            statisticService.gamesCount += 1
             
         } else {
             
