@@ -24,7 +24,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private var alertPresenter = AlertPresenter()
     
-    private var statisticService: StatisticServiceImplementation = StatisticServiceImplementation()
+    private var statisticService: StatisticService?
     
     override func viewDidLoad() {
         
@@ -156,18 +156,19 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showNextQuestionOrResults() {
         
         if currentQuestionIndex == questionsAmount - 1 {
-            statisticService.store(correct: correctAnswers, total: questionsAmount)
             
+            statisticService?.store(correct: correctAnswers, total: questionsAmount)
+            statisticService?.gamesCount += 1
             let resultText = "Ваш результат: \(correctAnswers)/10"
-            let totalGamesText = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+            let totalGamesText = "Количество сыгранных квизов: \(statisticService?.gamesCount ?? 0)"
             let bestGameText: String
-            if statisticService.bestGame.correct > 0 {
-                let formattedDate = dateTimeDefaultFormatter.string(from: statisticService.bestGame.date)
-                bestGameText = "Рекорд: \(statisticService.bestGame.correct)/\(statisticService.bestGame.total) (\(formattedDate))"
+            if statisticService?.bestGame.correct ?? 0 > 0 {
+                let formattedDate = dateTimeDefaultFormatter.string(from: statisticService?.bestGame.date ?? Date())
+                bestGameText = "Рекорд: \(statisticService?.bestGame.correct ?? 0)/\(statisticService?.bestGame.total ?? 0) (\(formattedDate))"
             } else {
                 bestGameText = "Рекорд: Еще нет данных"
             }
-            let averageAccuracyText = String(format: "Средняя точность: %.2f%%", statisticService.totalAccuracy * 100)
+            let averageAccuracyText = String(format: "Средняя точность: %.2f%%", (statisticService?.totalAccuracy ?? 0.0) * 100)
             
             let message = """
             \(resultText)
@@ -189,7 +190,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 })
             
             setButtonsStatus(isEnabled: true)
-            statisticService.gamesCount += 1
             
         } else {
             
