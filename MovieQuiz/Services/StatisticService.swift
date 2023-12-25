@@ -3,8 +3,8 @@ import Foundation
 
 protocol StatisticService {
     
-    var totalAccuracy: Double { get }
-    var gamesCount: Int { get }
+    var totalAccuracy: Double { get set }
+    var gamesCount: Int { get set }
     var bestGame: GameRecord { get set }
     func store(correct count: Int, total amount: Int)
     
@@ -38,14 +38,12 @@ final class StatisticServiceImplementation: StatisticService {
         
         let currentDate = Date()
         let newRecord = GameRecord(correct: count, total: amount, date: currentDate)
-        
         if count > bestGame.correct {
             bestGame = newRecord
         } else if count == bestGame.correct {
             bestGame.date = currentDate
         }
         
-        let formattedDate = dateTimeDefaultFormatter.string(from: currentDate)
         let totalCorrect = bestGame.correct + count
         let totalTotal = bestGame.total + amount
         totalAccuracy = totalTotal > 0 ? Double(totalCorrect) / Double(totalTotal) : 0.0
