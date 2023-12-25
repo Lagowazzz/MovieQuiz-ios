@@ -12,6 +12,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     @IBOutlet private weak var imageView: UIImageView!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     private var currentQuestionIndex = 0
     
     private var correctAnswers = 0
@@ -64,6 +66,32 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBAction private func yesButtonClicked(_ sender: Any) {
         
         answerGived(answer: true)
+        
+    }
+    
+    private func showLoadingIndicator() {
+        
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        
+    }
+    
+    private func showNetworkError(message: String) {
+        
+        activityIndicator.isHidden = true
+        
+        let model = AlertModel(title: "Ошибка",
+                               resultMessage: message,
+                                   buttonText: "Попробовать еще раз") { [weak self] in
+                guard let self = self else { return }
+                
+                self.currentQuestionIndex = 0
+                self.correctAnswers = 0
+                
+                self.questionFactory?.requestNextQuestion()
+            }
+            
+        alertPresenter.presentAlert(on: self, with: model)
         
     }
     
