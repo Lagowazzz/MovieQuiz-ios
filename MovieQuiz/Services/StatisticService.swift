@@ -2,40 +2,29 @@
 import Foundation
 
 protocol StatisticService {
-    
     var totalAccuracy: Double { get set }
     var gamesCount: Int { get set }
     var bestGame: GameRecord { get set }
     func store(correct count: Int, total amount: Int)
-    
 }
 
 struct GameRecord: Codable {
-    
     let correct: Int
     let total: Int
     var date: Date
     
     func isBetterThan(_ another: GameRecord) -> Bool {
-        
         correct > another.correct
-        
     }
-    
 }
 
 final class StatisticServiceImplementation: StatisticService {
-    
     private let userDefaults = UserDefaults.standard
-    
     private enum Keys: String {
-        
         case correct, total, bestGame, gamesCount
-        
     }
     
     func store(correct count: Int, total amount: Int) {
-        
         let currentDate = Date()
         let newRecord = GameRecord(correct: count, total: amount, date: currentDate)
         if count > bestGame.correct {
@@ -43,7 +32,6 @@ final class StatisticServiceImplementation: StatisticService {
         } else if count == bestGame.correct {
             bestGame.date = currentDate
         }
-        
         let totalCorrect = bestGame.correct + count
         let totalTotal = bestGame.total + amount
         totalAccuracy = totalTotal > 0 ? Double(totalCorrect) / Double(totalTotal) : 0.0
@@ -74,7 +62,6 @@ final class StatisticServiceImplementation: StatisticService {
                   let record = try? JSONDecoder().decode(GameRecord.self, from: data) else {
                 return .init(correct: 0, total: 0, date: Date())
             }
-            
             return record
         }
         
@@ -83,9 +70,7 @@ final class StatisticServiceImplementation: StatisticService {
                 print("Невозможно сохранить результат")
                 return
             }
-            
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
         }
     }
-    
 }
