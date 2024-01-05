@@ -173,12 +173,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 buttonText: viewModel.buttonText) { [weak self] in
                     self?.resetGame()
                 })
-            setButtonsStatus(isEnabled: true)
         } else {
             activityIndicator.startAnimating()
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
-            setButtonsStatus(isEnabled: true)
             activityIndicator.stopAnimating()
         }
     }
