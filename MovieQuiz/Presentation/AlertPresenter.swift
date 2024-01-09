@@ -12,6 +12,9 @@ final class AlertPresenter {
             model.completion?()
         }
         alert.addAction(action)
+        if let alertView = alert.view {
+            alertView.accessibilityIdentifier = "Alert"
+        }
         viewController.present(alert, animated: true, completion: nil)
     }
 }
