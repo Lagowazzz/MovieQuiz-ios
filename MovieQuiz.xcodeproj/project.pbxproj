@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		692EC9E92B5139F1007F3193 /* MovieQuizPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692EC9E82B5139F1007F3193 /* MovieQuizPresenter.swift */; };
 		693C5BCB2B24700C0002638A /* QuestionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C5BCA2B24700C0002638A /* QuestionFactory.swift */; };
 		693C5BCE2B2473B40002638A /* QuizStepViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C5BCD2B2473B40002638A /* QuizStepViewModel.swift */; };
 		693C5BD02B2473D70002638A /* QuizResultsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693C5BCF2B2473D70002638A /* QuizResultsViewModel.swift */; };
@@ -53,6 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		692EC9E82B5139F1007F3193 /* MovieQuizPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieQuizPresenter.swift; sourceTree = "<group>"; };
 		693C5BCA2B24700C0002638A /* QuestionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionFactory.swift; sourceTree = "<group>"; };
 		693C5BCD2B2473B40002638A /* QuizStepViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizStepViewModel.swift; sourceTree = "<group>"; };
 		693C5BCF2B2473D70002638A /* QuizResultsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizResultsViewModel.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				AD1ABAB52831907B00B3E448 /* MovieQuizViewController.swift */,
 				AD1ABAB72831907B00B3E448 /* Main.storyboard */,
 				696B12132B269078006FFC54 /* AlertPresenter.swift */,
+				692EC9E82B5139F1007F3193 /* MovieQuizPresenter.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 				693C5BCE2B2473B40002638A /* QuizStepViewModel.swift in Sources */,
 				693C5BD22B2473FA0002638A /* QuizQuestion.swift in Sources */,
 				69A6B4242B39B762007FE8B4 /* MoviesLoader.swift in Sources */,
+				692EC9E92B5139F1007F3193 /* MovieQuizPresenter.swift in Sources */,
 				693C5BCB2B24700C0002638A /* QuestionFactory.swift in Sources */,
 				69A6B4222B39B595007FE8B4 /* MostPopularMovies.swift in Sources */,
 				AD77F5742857F8810062FB14 /* Date+Extensions.swift in Sources */,

@@ -14,11 +14,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    private var currentQuestionIndex = 0
+    private let presenter  = MovieQuizPresenter()
     
     private var correctAnswers = 0
-    
-    private let questionsAmount: Int = 10
     
     private var questionFactory: QuestionFactoryProtocol?
     
@@ -43,7 +41,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             return
         }
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
@@ -67,7 +65,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                                resultMessage: "Ошибка загрузки данных((( \n Попробуйте еще раз!",
                                buttonText: "Попробовать еще раз") { [weak self] in
             guard let self = self else { return }
-            self.currentQuestionIndex = 0
+            self.presenter.resetQuestionIndex()
             self.correctAnswers = 0
             questionFactory?.loadData()
             self.questionFactory?.requestNextQuestion()
@@ -85,13 +83,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             return
         }
         showAnswerResult(isCorrect: answer == currentQuestion.correctAnswer)
-    }
-    
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        return QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(),
-            question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
     
     private func show(quiz step: QuizStepViewModel) {
@@ -138,14 +129,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func resetGame() {
-        currentQuestionIndex = 0
+        presenter.resetQuestionIndex()
         correctAnswers = 0
         questionFactory?.requestNextQuestion()
     }
     
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questionsAmount - 1 {
-            statisticService?.store(correct: correctAnswers, total: questionsAmount)
+        if presenter.isLastQuestion() {
+            statisticService?.store(correct: correctAnswers, total: presenter.questionsAmount)
             statisticService?.gamesCount += 1
             let resultText = "Ваш результат: \(correctAnswers)/10"
             let totalGamesText = "Количество сыгранных квизов: \(statisticService?.gamesCount ?? 0)"
@@ -175,7 +166,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 })
         } else {
             activityIndicator.startAnimating()
-            currentQuestionIndex += 1
+            presenter.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
             activityIndicator.stopAnimating()
         }
