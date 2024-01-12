@@ -2,6 +2,8 @@ import UIKit
 import Foundation
 
 final class MovieQuizPresenter {
+    weak var viewController: MovieQuizViewController?
+    var currentQuestion: QuizQuestion?
     let questionsAmount = 10
     private var currentQuestionIndex = 0
     
@@ -24,4 +26,30 @@ final class MovieQuizPresenter {
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
+    
+    func yesButtonClicked() {
+        answerGived(answer: true)
+    }
+    
+    func noButtonClicked() {
+        answerGived(answer: false)
+    }
+    private func answerGived(answer: Bool) {
+        guard let currentQuestion = currentQuestion else {
+            return
+        }
+        viewController?.showAnswerResult(isCorrect: answer == currentQuestion.correctAnswer)
+    }
+    
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.show(quiz: viewModel)
+        }
+    }
 }
+
