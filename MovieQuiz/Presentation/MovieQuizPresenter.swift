@@ -1,7 +1,7 @@
 import UIKit
 
 protocol MovieQuizViewControllerProtocol: AnyObject {
-
+    
     func show(quiz step: QuizStepViewModel)
     func show(quiz result: QuizResultsViewModel)
     func highlightImageBorder(isCorrectAnswer: Bool)
@@ -24,9 +24,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
-        
         statisticService = StatisticServiceImplementation()
-        
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(networkClient: NetworkClient()), delegate: self)
         questionFactory?.loadData()
         viewController.showLoadingIndicator()
@@ -102,20 +100,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
-    
-    
-    
-    
     private func proceedWithAnswer(isCorrect: Bool) {
         viewController?.setButtonsStatus(isEnabled: false)
         didAnswer(isCorrectAnswer: isCorrect)
-        
         viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
-        
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             guard let self = self else { return }
-            
             self.proceedToNextQuestionOrResults()
         }
     }
@@ -142,16 +132,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     func makeResultsMessage() -> String {
         statisticService.store(correct: correctAnswers, total: questionsAmount)
-        
         let bestGame = statisticService.bestGame
-        
         let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let currentGameResultLine = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
         let bestGameInfoLine = "Рекорд: \(bestGame.correct)/\(bestGame.total)"
         + " (\(bestGame.date.dateTimeString))"
         let averageAccuracyLine = "Средняя точность: \(String(format: "%.0f", statisticService.totalAccuracy * 100))%"
-        
-        
         let resultMessage = [
             currentGameResultLine, totalPlaysCountLine, bestGameInfoLine, averageAccuracyLine
         ].joined(separator: "\n")

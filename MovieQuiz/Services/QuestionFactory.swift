@@ -1,11 +1,8 @@
 import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
-    
     private let moviesLoader: MoviesLoading
-    
     weak var delegate: QuestionFactoryDelegate?
-    
     init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) {
         self.moviesLoader = moviesLoader
         self.delegate = delegate
