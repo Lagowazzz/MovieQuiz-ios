@@ -1,7 +1,8 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
+ 
     @IBOutlet weak var yesButton: UIButton!
     
     @IBOutlet weak var noButton: UIButton!
@@ -34,6 +35,11 @@ final class MovieQuizViewController: UIViewController {
     
     @IBAction private func yesButtonClicked(_ sender: Any) {
         presenter.yesButtonClicked()
+    }
+    
+    func setButtonsStatus(isEnabled: Bool) {
+       yesButton.isEnabled = isEnabled
+      noButton.isEnabled = isEnabled
     }
     
     // MARK: - Private functions
