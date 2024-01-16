@@ -13,6 +13,7 @@ protocol MovieQuizViewControllerProtocol: AnyObject {
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
     
+    let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
     private var statisticService: StatisticService!
     private var questionFactory: QuestionFactoryProtocol?
     private weak var viewController: MovieQuizViewControllerProtocol?
@@ -64,6 +65,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         }
     }
     
+    func feedback() {
+        feedbackGenerator.prepare()
+        feedbackGenerator.impactOccurred()
+    }
+    
     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
@@ -84,10 +90,12 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     func yesButtonClicked() {
         didAnswer(isYes: true)
+        feedback()
     }
     
     func noButtonClicked() {
         didAnswer(isYes: false)
+        feedback()
     }
     
     private func didAnswer(isYes: Bool) {
@@ -121,6 +129,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
                 title: "Этот раунд окончен!",
                 text: text,
                 buttonText: "Сыграть ещё раз")
+            feedback()
             viewController?.show(quiz: viewModel)
             viewController?.setButtonsStatus(isEnabled: true)
         } else {
