@@ -3,7 +3,6 @@ import Foundation
 struct MostPopularMovies: Codable {
     let errorMessage: String
     let items: [MostPopularMovie]
-    
     var hasError: Bool {
         return !errorMessage.isEmpty
     }
@@ -17,7 +16,6 @@ struct MostPopularMovie: Codable {
     let title: String
     let rating: String
     let imageURL: URL
-    
     var resizedImageURL: URL {
         let urlString = imageURL.absoluteString
         let imageUrlString = urlString.components(separatedBy: "._")[0] + "._V0_UX600_.jpg"
